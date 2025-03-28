@@ -16,5 +16,17 @@ class Booking extends Model
         'returned_at',
         'status',
     ];
+
+    // Relationship: A booking belongs to a book
+    public function book()
+    {
+        return $this->belongsTo(Book::class);
+    }
+
+    // Relationship: A booking belongs to a user
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     
 }

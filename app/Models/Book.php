@@ -16,5 +16,14 @@ class Book extends Model
         'description',
         'stock',
     ];
+
+    
+// Relationship: One book can have many bookings
+
+    public function bookings()
+    {
+        return $this->hasMany(\App\Models\Booking::class);
+    }
+
     
 }

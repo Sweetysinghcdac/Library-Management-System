@@ -6,81 +6,30 @@ use Livewire\Component;
 use App\Models\Book;
 use App\Models\Booking;
 use Illuminate\Support\Facades\Auth;
+use Livewire\WithPagination;
+use Carbon\Carbon;
 
 class BookBrowse extends Component
 {
-    // public $search = '';
-    // public $selectedBook = null;
-    // public $showModal = false;
-    // public $alreadyBooked = false;
+    use WithPagination;
 
-    // public function updatedSearch()
-    // {
-    //     $this->reset('selectedBook', 'showModal', 'alreadyBooked');
-    // }
+    public $statusFilter = '';
 
-    // public function selectBook($bookId)
-    // {
-    //     $this->selectedBook = Book::findOrFail($bookId);
-    //     $this->alreadyBooked = Booking::where('book_id', $bookId)
-    //         ->where('user_id', Auth::id())
-    //         ->whereNull('returned_at')
-    //         ->exists();
-    //     $this->showModal = true;
-    // }
-
-    // public function bookSelectedBook()
-    // {
-    //     if (!$this->selectedBook || $this->alreadyBooked) return;
-
-    //     Booking::create([
-    //         'user_id' => Auth::id(),
-    //         'book_id' => $this->selectedBook->id,
-    //         'borrowed_at' => Carbon::today(),
-    //         'due_date' => Carbon::today()->addDays(7),
-    //         'status' => 'pending',
-    //     ]);
-
-    //     $this->dispatchBrowserEvent('close-modal');
-    //     session()->flash('message', 'Book reserved successfully!');
-    //     $this->reset('selectedBook', 'showModal', 'alreadyBooked');
-    // }
-
-    // public function render()
-    // {
-    //     $books = Book::query()
-    //         ->where('title', 'like', "%{$this->search}%")
-    //         ->orWhere('author', 'like', "%{$this->search}%")
-    //         ->orWhere('category', 'like', "%{$this->search}%")
-    //         ->get();
-
-    //     return view('livewire.visitor.book-browse', [
-    //         'books' => $books,
-    //     ]);
-    // }
-    
     public $search = '';
-    public $books;
-
-    public function mount()
+    public $perPage = 9;
+    public $successMessage = '';
+    public function updatingStatusFilter()
     {
-        $this->books = Book::all();
+        $this->resetPage();
     }
 
-    public function updatedSearch()
-    {
-        $this->books = Book::where('title', 'like', "%{$this->search}%")
-            ->orWhere('author', 'like', "%{$this->search}%")
-            ->orWhere('category', 'like', "%{$this->search}%")
-            ->get();
-    }
+    public function reserve($bookId)
 
-    public function bookNow($bookId)
     {
         $book = Book::findOrFail($bookId);
 
         if ($book->stock < 1) {
-            session()->flash('error', 'Book is currently unavailable.');
+            $this->addError('stock', 'This book is currently out of stock.');
             return;
         }
 
@@ -89,19 +38,24 @@ class BookBrowse extends Component
             'book_id' => $bookId,
             'borrowed_at' => Carbon::now(),
             'due_date' => Carbon::now()->addDays(7),
-            'status' => 'pending',
         ]);
 
         $book->decrement('stock');
 
-        session()->flash('message', 'Book successfully booked!');
-        $this->books = Book::all();
+        $this->successMessage = "You've successfully booked '{$book->title}'. Please return it on time.";
     }
-
 
     public function render()
     {
+        $books = Book::where(function ($query) {
+            $query->where('title', 'like', "%{$this->search}%")
+                ->orWhere('author', 'like', "%{$this->search}%")
+                ->orWhere('category', 'like', "%{$this->search}%");
+        })
+        ->orderBy('created_at', 'desc')
+        ->paginate($this->perPage);
 
-        return view('livewire.visitor.book-browse',)->layout('layouts.visitor');
+        return view('livewire.visitor.book-browse', compact('books'))
+            ->layout('layouts.visitor');
     }
 }
