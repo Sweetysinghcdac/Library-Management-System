@@ -21,7 +21,13 @@ new #[Layout('layouts.guest')] class extends Component
 
         Session::regenerate();
 
-        $this->redirectIntended(default: RouteServiceProvider::HOME, navigate: true);
+        // $this->redirectIntended(default: RouteServiceProvider::HOME, navigate: true);
+        $user = auth()->user();
+
+        $this->redirectIntended(
+            default: $user->role === 'admin' ? route('admin.dashboard') : route('visitor.dashboard'),
+            navigate: true
+        );
     }
 }; ?>
 

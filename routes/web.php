@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardRedirectController;
-
+use App\Livewire\Admin\Dashboard as AdminDashboard;
+use App\Livewire\Visitor\Dashboard as VisitorDashboard;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,6 +28,14 @@ Route::view('profile', 'profile')
 Route::get('/redirect-dashboard', DashboardRedirectController::class)
 ->middleware(['auth', 'verified']);
 
+Route::get('/admin/dashboard', AdminDashboard::class)
+->middleware('role:admin')
+->name('admin.dashboard');
+
+// Visitor route with role check
+Route::get('/visitor/dashboard', VisitorDashboard::class)
+->middleware('role:visitor')
+->name('visitor.dashboard');
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::middleware('role:admin')->prefix('admin')->group(function () {

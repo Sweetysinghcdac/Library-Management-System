@@ -1,7 +1,8 @@
 <div class="p-6">
     <h2 class="text-xl font-bold mb-4">Available Books</h2>
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        @foreach ($books as $book)
+        @forelse ($books as $book)
             <div class="border p-4 rounded shadow">
                 <h3 class="text-lg font-semibold">{{ $book->title }}</h3>
                 <p class="text-sm text-gray-600">By {{ $book->author }}</p>
@@ -11,6 +12,10 @@
                     Borrow
                 </a>
             </div>
-        @endforeach
+        @empty
+            <div class="col-span-2 text-gray-500 text-center">
+                No books available at the moment. 📚
+            </div>
+        @endforelse
     </div>
 </div>
