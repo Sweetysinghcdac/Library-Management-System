@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardRedirectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,11 +16,28 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+// Route::view('dashboard', 'dashboard')
+//     ->middleware(['auth', 'verified'])
+//     ->name('dashboard');
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
+
+Route::get('/redirect-dashboard', DashboardRedirectController::class)
+->middleware(['auth', 'verified']);
+
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    Route::middleware('role:admin')->prefix('admin')->group(function () {
+        Route::get('/books', \App\Livewire\Admin\BookManager::class)->name('admin.books');
+        Route::get('/reports', \App\Livewire\Admin\Reports::class)->name('admin.reports');
+    });
+
+    Route::middleware('role:visitor')->prefix('visitor')->group(function () {
+        Route::get('/books', \App\Livewire\Visitor\BookList::class)->name('visitor.books');
+        Route::get('/borrow/{book}', \App\Livewire\Visitor\BookBorrow::class)->name('visitor.borrow');
+    });
+});
+
 require __DIR__.'/auth.php';
