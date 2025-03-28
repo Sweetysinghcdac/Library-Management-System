@@ -15,6 +15,6 @@ class AdminNavbar extends Component
 
     public function render()
     {
-        return view('livewire.admin-navbar');
+        return view('livewire.admin.admin-navbar');
     }
 }
