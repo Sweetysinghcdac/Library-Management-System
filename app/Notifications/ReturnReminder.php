@@ -7,48 +7,42 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ReturnReminder extends Notification
+class ReturnReminder extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    /**
-     * Create a new notification instance.
-     */
-    public function __construct()
+    use Queueable;
+
+    public $bookTitle;
+    public $dueDate;
+
+    public function __construct($bookTitle, $dueDate)
     {
-        //
+        $this->bookTitle = $bookTitle;
+        $this->dueDate = $dueDate;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
-     */
-    public function via(object $notifiable): array
+    public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail','database']; // or add 'database' for UI notification
     }
 
-    /**
-     * Get the mail representation of the notification.
-     */
-    public function toMail(object $notifiable): MailMessage
+    public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        return (new \Illuminate\Notifications\Messages\MailMessage)
+                    ->subject("📚 Book Return Reminder")
+                    ->greeting("Hello {$notifiable->name},")
+                    ->line("This is a reminder to return the book '{$this->bookTitle}' by {$this->dueDate}.")
+                    ->line("Please make sure to return it on time to avoid late penalties.")
+                    ->action('View Your Borrowings', url('/visitor/dashboard'))
+                    ->line('Thank you for using our library!');
     }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(object $notifiable): array
+    public function toDatabase($notifiable)
     {
         return [
-            //
+            'message' => "Reminder: Return '{$this->bookTitle}' by {$this->dueDate}.",
+            'url' => url('/visitor/dashboard'),
         ];
     }
 }
+

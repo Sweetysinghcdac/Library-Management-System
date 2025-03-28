@@ -15,6 +15,7 @@
             📚 Browse More Books
         </a>
     </div>
+    
 
     <div class="flex flex-wrap items-center gap-2">
         <select wire:model="statusFilter" class="border border-gray-300 rounded px-4 py-2 text-sm shadow-sm">
@@ -25,7 +26,28 @@
 
         <input type="date" wire:model="fromDate" class="border border-gray-300 rounded px-3 py-2 text-sm" placeholder="From Date">
         <input type="date" wire:model="toDate" class="border border-gray-300 rounded px-3 py-2 text-sm" placeholder="To Date">
+        <a href="{{ route('visitor.export.pdf', [
+        'status' => $statusFilter,
+        'fromDate' => $fromDate,
+        'toDate' => $toDate
+    ]) }}" 
+    target="_blank"
+    class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700 transition">
+        📄 PDF
+    </a>
+
+    <a href="{{ route('visitor.export.csv', [
+        'status' => $statusFilter,
+        'fromDate' => $fromDate,
+        'toDate' => $toDate
+    ]) }}"
+    class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700 transition">
+        📁 CSV
+    </a>
+    
     </div>
+
+    
 </div>
 
     

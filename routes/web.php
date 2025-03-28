@@ -4,7 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardRedirectController;
 use App\Livewire\Admin\Dashboard as AdminDashboard;
 use App\Livewire\Visitor\Dashboard as VisitorDashboard;
-use App\Livewire\Visitor\BookBrowse;
+use App\Livewire\Visitor\BookBrowse as BookBrowse;
+use App\Http\Controllers\Visitor\ExportController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -49,6 +50,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Route::get('/books', \App\Livewire\Visitor\BookList::class)->name('visitor.books');
         Route::get('/borrow/{book}', \App\Livewire\Visitor\BookBorrow::class)->name('visitor.borrow');
         Route::get('/books', \App\Livewire\Visitor\BookBrowse::class)->name('visitor.books');
+        Route::get('/bookings/export/pdf', [ExportController::class, 'pdf'])->name('visitor.export.pdf');
+        Route::get('/bookings/export/csv', [ExportController::class, 'csv'])->name('visitor.export.csv');
+        Route::post('/visitor/notifications/read-all', function () {
+            auth()->user()->unreadNotifications->markAsRead();
+            return back();
+        })->name('visitor.notifications.readAll');
     });
 });
 
