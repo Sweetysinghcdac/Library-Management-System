@@ -1,30 +1,28 @@
-<div>
-    <h1 class="text-2xl font-bold mb-6">📚 My Borrowed Books</h1>
+{{-- resources/views/livewire/visitor/dashboard.blade.php --}}
+<div class="space-y-6">
+    <h1 class="text-3xl font-bold text-gray-800">📖 Visitor Dashboard</h1>
 
-    @if ($bookings->isEmpty())
-        <p class="text-gray-600">You haven’t borrowed any books yet.</p>
-    @else
-        <div class="overflow-x-auto">
-            <table class="w-full table-auto border">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="p-2 text-left">Title</th>
-                        <th class="p-2">Borrowed At</th>
-                        <th class="p-2">Returned At</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($bookings as $booking)
-                        <tr class="border-t">
-                            <td class="p-2">{{ $booking->book->title }}</td>
-                            <td class="p-2">{{ $booking->borrowed_at->format('d M Y') }}</td>
-                            <td class="p-2">
-                                {{ $booking->returned_at ? $booking->returned_at->format('d M Y') : '⏳ Not yet returned' }}
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    @endif
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        {{-- Book a Book Card --}}
+        <a href="{{ route('visitor.books') }}" class="block bg-white p-6 rounded-xl shadow hover:shadow-md transition border border-gray-200">
+            <div class="text-2xl font-semibold text-blue-700">📚 Browse & Reserve</div>
+            <p class="text-gray-600 mt-2">Search and reserve books available in the library.</p>
+        </a>
+
+        {{-- Borrowed History Card --}}
+        <a href="" class="block bg-white p-6 rounded-xl shadow hover:shadow-md transition border border-gray-200">
+            <div class="text-2xl font-semibold text-green-700">📘 My Borrowed Books</div>
+            <p class="text-gray-600 mt-2">View your past and current book borrowings.</p>
+        </a>
+
+        {{-- Profile Access --}}
+        <a href="{{ route('profile') }}" class="block bg-white p-6 rounded-xl shadow hover:shadow-md transition border border-gray-200">
+            <div class="text-2xl font-semibold text-gray-700">👤 My Profile</div>
+            <p class="text-gray-600 mt-2">Manage your personal information.</p>
+        </a>
+    </div>
+
+    <div class="mt-10">
+        <p class="text-gray-500 text-sm">Need help? Visit the help center or contact the librarian.</p>
+    </div>
 </div>

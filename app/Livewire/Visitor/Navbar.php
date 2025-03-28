@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace  App\Livewire\Visitor;
 
 use Livewire\Component;
 use App\Livewire\Actions\Logout;
@@ -14,6 +14,6 @@ class Navbar extends Component
 
     public function render()
     {
-        return view('livewire.navbar');
+        return view('livewire.visitor.navbar');
     }
 }

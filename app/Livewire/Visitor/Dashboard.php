@@ -20,8 +20,7 @@ class Dashboard extends Component
     
         public function render()
         {
-            return view('livewire.visitor.dashboard')
-                ->layout('layouts.visitor');
+            return view('livewire.visitor.dashboard')->layout('layouts.visitor');
         }
     }
 
