@@ -1,4 +1,5 @@
 <div x-data="{ openSidebar: false }" class="md:block">
+
     <!-- Mobile Topbar -->
     <div class="md:hidden flex items-center justify-between bg-white p-4 shadow">
         <h1 class="text-lg font-bold text-blue-600">📚 Library</h1>
@@ -39,7 +40,7 @@
                         </a>
                     </li>
 
-                    {{-- Notification Dropdown --}}
+                    <!-- Notification Dropdown -->
                     <li x-data="{ open: false }" class="relative">
                         <button @click="open = !open" class="flex items-center gap-2 text-gray-700 hover:text-blue-600">
                             🔔 Notifications
@@ -50,7 +51,6 @@
                             @endif
                         </button>
 
-                        {{-- Dropdown Panel --}}
                         <div x-show="open" @click.outside="open = false"
                              class="absolute left-0 top-full mt-2 w-72 bg-white shadow-md border rounded-lg z-50">
                             <div class="p-3 border-b font-semibold text-sm text-gray-700">Recent Notifications</div>
@@ -76,9 +76,11 @@
                 </ul>
             </div>
 
+            <!-- Livewire Logout Button -->
             <div class="mt-6">
-            <button wire:click="logout" class="text-red-600 hover:underline"> 🔒 Logout </button>
-              
+                <button type="button" wire:click="logout" class="text-red-600 hover:underline">
+                    🔒 Logout
+                </button>
             </div>
         </div>
     </nav>

@@ -1,7 +1,7 @@
 <div class="space-y-6">
     <h1 class="text-2xl font-bold text-gray-800">📖 Browse Books</h1>
 
-    {{-- Search Input and Button --}}
+    {{-- Search Input --}}
     <div class=" ml-5">
         <input wire:model.defer="search"
                type="text"
@@ -13,6 +13,7 @@
             🔍 Search
         </button>
     </div>
+    
 
     {{-- Success Message --}}
     @if ($successMessage)
@@ -46,6 +47,7 @@
             </div>
         @endforelse
     </div>
+
 
     {{-- Pagination Info --}}
     @if ($books->total() > 0)

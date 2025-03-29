@@ -4,6 +4,7 @@ namespace  App\Livewire\Visitor;
 
 use Livewire\Component;
 use App\Livewire\Actions\Logout;
+use Illuminate\Support\Facades\Auth;
 class Navbar extends Component
 {
     public function logout(Logout $logout)
