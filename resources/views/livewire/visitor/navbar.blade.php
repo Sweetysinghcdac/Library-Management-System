@@ -1,4 +1,3 @@
-{{-- resources/views/livewire/visitor/navbar.blade.php --}}
 <div x-data="{ openSidebar: false }" class="md:block">
     <!-- Mobile Topbar -->
     <div class="md:hidden flex items-center justify-between bg-white p-4 shadow">
@@ -40,7 +39,7 @@
                         </a>
                     </li>
 
-                    {{-- 🔔 Notification Dropdown --}}
+                    {{-- Notification Dropdown --}}
                     <li x-data="{ open: false }" class="relative">
                         <button @click="open = !open" class="flex items-center gap-2 text-gray-700 hover:text-blue-600">
                             🔔 Notifications
@@ -77,11 +76,9 @@
                 </ul>
             </div>
 
-            {{-- 🔓 Logout --}}
             <div class="mt-6">
-                <button wire:click="logout" class="text-red-600 hover:underline">
-                    🔒 Logout
-                </button>
+            <button wire:click="logout" class="text-red-600 hover:underline"> 🔒 Logout </button>
+              
             </div>
         </div>
     </nav>

@@ -13,18 +13,12 @@ class BookBrowse extends Component
 {
     use WithPagination;
 
-    public $statusFilter = '';
-
     public $search = '';
-    public $perPage = 9;
+    public $perPage = 6;
     public $successMessage = '';
-    public function updatingStatusFilter()
-    {
-        $this->resetPage();
-    }
+    public $searched = false;
 
     public function reserve($bookId)
-
     {
         $book = Book::findOrFail($bookId);
 
@@ -45,15 +39,31 @@ class BookBrowse extends Component
         $this->successMessage = "You've successfully booked '{$book->title}'. Please return it on time.";
     }
 
+    public function updatingSearch()
+    {
+        $this->searched = false;
+    }
+
+    public function searchBooks()
+    {
+        $this->resetPage();
+        $this->searched = true;
+    }
+    
+
     public function render()
     {
-        $books = Book::where(function ($query) {
-            $query->where('title', 'like', "%{$this->search}%")
-                ->orWhere('author', 'like', "%{$this->search}%")
-                ->orWhere('category', 'like', "%{$this->search}%");
-        })
-        ->orderBy('created_at', 'desc')
-        ->paginate($this->perPage);
+        $query = Book::query();
+
+        if ($this->searched && $this->search !== '') {
+            $query->where(function ($q) {
+                $q->where('title', 'like', "%{$this->search}%")
+                  ->orWhere('author', 'like', "%{$this->search}%")
+                  ->orWhere('category', 'like', "%{$this->search}%");
+            });
+        }
+
+        $books = $query->orderBy('created_at', 'desc')->paginate($this->perPage);
 
         return view('livewire.visitor.book-browse', compact('books'))
             ->layout('layouts.visitor');
