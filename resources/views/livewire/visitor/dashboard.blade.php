@@ -1,10 +1,29 @@
 <div class="space-y-6">
     <h1 class="text-3xl font-bold text-gray-800">📖 My Borrowed Books</h1>
 
+    
     @if (session('message'))
-        <div class="bg-green-100 text-green-700 p-3 rounded-lg shadow">{{ session('message') }}</div>
+    <div 
+        x-data="{ show: true }" 
+        x-show="show" 
+        x-init="setTimeout(() => show = false, 2000)" 
+        x-transition
+        x-cloak
+        class="bg-green-100 text-green-700 p-3 rounded-lg shadow"
+    >
+        {{ session('message') }}
+    </div>
     @elseif (session('error'))
-        <div class="bg-red-100 text-red-700 p-3 rounded-lg shadow">{{ session('error') }}</div>
+        <div 
+            x-data="{ show: true }" 
+            x-show="show" 
+            x-init="setTimeout(() => show = false, 3000)" 
+            x-transition
+            x-cloak
+            class="bg-red-100 text-red-700 p-3 rounded-lg shadow"
+        >
+            {{ session('error') }}
+        </div>
     @endif
 
     <!-- Filter bar -->

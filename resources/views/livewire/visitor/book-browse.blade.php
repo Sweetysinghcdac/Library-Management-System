@@ -17,13 +17,34 @@
 
     {{-- Success Message --}}
     @if ($successMessage)
-        <div class="bg-green-100 text-green-700 p-3 rounded shadow-sm">{{ $successMessage }}</div>
+        <div 
+            x-data="{ show: true }" 
+            x-show="show" 
+            x-init="setTimeout(() => show = false, 2000)" 
+            x-transition:leave="transition ease-in duration-500"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="bg-green-100 text-green-700 p-3 rounded shadow-sm"
+            x-cloak
+        >
+            {{ $successMessage }}
+        </div>
     @endif
 
-    {{-- Error Message --}}
+
     @error('stock')
-        <div class="bg-red-100 text-red-700 p-3 rounded shadow-sm">{{ $message }}</div>
+        <div 
+            x-data="{ show: true }" 
+            x-show="show" 
+            x-init="setTimeout(() => show = false, 2000)" 
+            class="bg-red-100 text-red-700 p-3 rounded shadow-sm"
+            x-cloak
+            x-transition
+        >
+            {{ $message }}
+        </div>
     @enderror
+
 
     {{-- Book Cards --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

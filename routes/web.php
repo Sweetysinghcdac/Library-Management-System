@@ -11,7 +11,6 @@ use App\Livewire\Admin\Reports;
 use App\Livewire\Admin\BorrowedBooks;
 use App\Livewire\Visitor\Dashboard as VisitorDashboard;
 use App\Livewire\Visitor\BookBrowse;
-use App\Livewire\Visitor\BookBorrow;
 
 
 Route::view('/', 'welcome');
@@ -35,7 +34,6 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
 Route::middleware(['auth', 'verified', 'role:visitor'])->prefix('visitor')->name('visitor.')->group(function () {
     Route::get('/dashboard', VisitorDashboard::class)->name('dashboard');
     Route::get('/books', BookBrowse::class)->name('books');
-    Route::get('/borrow/{book}', BookBorrow::class)->name('borrow');
     
     // Export
     Route::get('/bookings/export/pdf', [ExportController::class, 'pdf'])->name('export.pdf');

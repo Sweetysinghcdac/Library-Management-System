@@ -21,20 +21,23 @@
     <nav :class="{'block': openSidebar, 'hidden': !openSidebar}" class="md:block bg-white w-full md:w-64 h-auto md:h-screen p-6 shadow-md z-50">
         <div class="flex flex-col justify-between h-full">
             <div>
-                <h1 class="text-xl font-bold text-blue-600 mb-8 hidden md:block">📚 Library</h1>
+            <h1 class="text-xl font-bold text-blue-600 mb-8 hidden md:block">
+                {{ auth()->user()->name }}
+            </h1>
 
                 <ul class="space-y-4">
-                    <li>
-                        <a href="{{ route('visitor.dashboard') }}" class="text-gray-700 hover:text-blue-600 block">
-                            🏠 Dashboard
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('visitor.books') }}" class="text-gray-700 hover:text-blue-600 block">
-                            📖 Browse Books
-                        </a>
-                    </li>
-                   
+                <li>
+                    <a href="{{ route('visitor.dashboard') }}"
+                    class="block {{ request()->routeIs('visitor.dashboard') ? 'text-blue-600 font-semibold' : 'text-gray-700' }} hover:text-blue-600">
+                        🏠 Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('visitor.books') }}"
+                    class="block {{ request()->routeIs('visitor.books') ? 'text-blue-600 font-semibold' : 'text-gray-700' }} hover:text-blue-600">
+                        📖 Browse Books
+                    </a>
+                </li>
                     <!-- Notification Dropdown -->
                     <li x-data="{ open: false }" class="relative">
                         <button @click="open = !open" class="flex items-center gap-2 text-gray-700 hover:text-blue-600">
