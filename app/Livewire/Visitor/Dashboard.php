@@ -12,28 +12,22 @@ class Dashboard extends Component
 {
     use WithPagination;
 
+    #[Url(as: 'status', keep: true)]
     public $statusFilter = 'all';
+
+    #[Url(keep: true)]
     public $fromDate = null;
-    public $toDate = null;  
 
-    protected $queryString = ['statusFilter', 'fromDate', 'toDate'];
-  
+    #[Url(keep: true)]
+    public $toDate = null;
 
-    public function updatingStatusFilter()
+    public function updated($property)
     {
-        $this->resetPage(); 
+        // Reset pagination on filter change
+        if (in_array($property, ['statusFilter', 'fromDate', 'toDate'])) {
+            $this->resetPage();
+        }
     }
-
-    public function updatingFromDate()
-    {
-        $this->resetPage();
-    }
-
-    public function updatingToDate()
-    {
-        $this->resetPage();
-    }
-
 
     public function markAsReturned($bookingId)
     {
@@ -55,35 +49,31 @@ class Dashboard extends Component
             session()->flash('error', '⚠️ Book could not be returned.');
         }
     }
-    public function loadBookings()
-{
-    // No operation; this just ensures Livewire has an AJAX-aware context
-}
 
+    #[Layout('layouts.visitor')]
     public function render()
-{
-    $query = Booking::with('book')
-        ->where('user_id', Auth::id())
-        ->latest();
-        
+    {
+        $query = Booking::with('book')
+            ->where('user_id', Auth::id())
+            ->latest();
 
-    if ($this->statusFilter !== 'all') {
-        $query->where('status', $this->statusFilter);
+        if ($this->statusFilter !== 'all') {
+            $query->where('status', $this->statusFilter);
+        }
+
+        if ($this->fromDate) {
+            $query->whereDate('borrowed_at', '>=', $this->fromDate);
+        }
+
+        if ($this->toDate) {
+            $query->whereDate('borrowed_at', '<=', $this->toDate);
+        }
+
+        $bookings = $query->paginate(6);
+
+        return view('livewire.visitor.dashboard', [
+            'bookings' => $bookings,
+        ]);
     }
-
-    if ($this->fromDate) {
-        $query->whereDate('borrowed_at', '>=', $this->fromDate);
-    }
-
-    if ($this->toDate) {
-        $query->whereDate('borrowed_at', '<=', $this->toDate);
-    }
-
-    $bookings = $query->paginate(6);
-
-    return view('livewire.visitor.dashboard', compact('bookings'))
-        ->layout('layouts.visitor');
-}
-
 }
 
