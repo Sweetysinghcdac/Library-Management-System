@@ -34,12 +34,7 @@
                             📖 Browse Books
                         </a>
                     </li>
-                    <li>
-                        <a href="{{ route('profile') }}" class="text-gray-700 hover:text-blue-600 block">
-                            👤 Profile
-                        </a>
-                    </li>
-
+                   
                     <!-- Notification Dropdown -->
                     <li x-data="{ open: false }" class="relative">
                         <button @click="open = !open" class="flex items-center gap-2 text-gray-700 hover:text-blue-600">
@@ -85,3 +80,8 @@
         </div>
     </nav>
 </div>
+<script>
+    Livewire.on('notify', data => {
+        alert(data.message); // Replace with toast if you like
+    });
+</script>

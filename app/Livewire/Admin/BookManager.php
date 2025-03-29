@@ -1,50 +1,59 @@
 <?php
 
 namespace App\Livewire\Admin;
-
+use Livewire\WithPagination;
 use Livewire\Component;
 use App\Models\Book;
 
 class BookManager extends Component
 {
-    public $books, $title, $author, $category, $description, $stock, $bookId;
+    use WithPagination;
+
+    public $title, $author, $category, $description, $stock, $bookId;
     public $isEdit = false;
+
+    protected $rules = [
+        'title' => 'required',
+        'author' => 'required',
+        'category' => 'required',
+        'stock' => 'required|integer|min:1',
+    ];
+
     public function render()
     {
-        $this->books = Book::latest()->get();
-        return view('livewire.admin.book-manager')
+        $books = Book::latest()->paginate(5);
+        return view('livewire.admin.book-manager', compact('books'))
             ->layout('layouts.admin');
     }
+
     public function resetInput()
     {
         $this->title = $this->author = $this->category = $this->description = $this->stock = '';
         $this->bookId = null;
         $this->isEdit = false;
+        $this->resetValidation();
     }
 
     public function store()
-    {
-        $this->validate([
-            'title' => 'required',
-            'author' => 'required',
-            'category' => 'required',
-            'stock' => 'required|integer|min:1',
-        ]);
+{
+    $this->validate();
 
-        Book::updateOrCreate(
-            ['id' => $this->bookId],
-            [
-                'title' => $this->title,
-                'author' => $this->author,
-                'category' => $this->category,
-                'description' => $this->description,
-                'stock' => $this->stock,
-            ]
-        );
+    Book::updateOrCreate(
+        ['id' => $this->bookId],
+        [
+            'title' => $this->title,
+            'author' => $this->author,
+            'category' => $this->category,
+            'description' => $this->description,
+            'stock' => $this->stock,
+        ]
+    );
 
-        session()->flash('message', $this->bookId ? 'Book updated.' : 'Book created.');
-        $this->resetInput();
-    }
+    $message = $this->bookId ? 'Book updated successfully!' : 'Book created successfully!';
+    $this->dispatch('popupMessage', $message);
+    $this->resetInput();
+}
+
 
     public function edit($id)
     {
@@ -59,8 +68,14 @@ class BookManager extends Component
     }
 
     public function delete($id)
+        {
+            Book::destroy($id);
+            $this->dispatch('popupMessage', 'Book deleted successfully!');
+        }
+    public function updating($field)
     {
-        Book::destroy($id);
-        session()->flash('message', 'Book deleted.');
+        if ($this->isEdit) {
+            $this->validateOnly($field);
+        }
     }
 }

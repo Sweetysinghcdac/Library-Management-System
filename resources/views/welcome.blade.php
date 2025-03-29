@@ -42,7 +42,7 @@
             </div>
         </div>
         <div class="w-full md:w-1/2 mb-12 md:mb-0">
-            <img src="https://illustrations.popsy.co/gray/reading-side.svg"
+            <img src="https://img.freepik.com/free-vector/online-library-concept-with-reading-people-electronic-devices-book-shelves-3d-isometric_1284-31703.jpg?t=st=1743239874~exp=1743243474~hmac=dd8d7a7cf114a2d49fd8f80a0f2f18e3e58a2da4b7b066b367f4ebdcbc3ec130&w=900"
                  alt="Library Illustration"
                  class="w-full max-w-md mx-auto">
         </div>

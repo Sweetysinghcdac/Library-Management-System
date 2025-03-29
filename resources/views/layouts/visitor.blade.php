@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <title>User Dashboard</title>
     
-    {{-- Tailwind & Vite --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    {{-- Livewire Styles --}}
     @livewireStyles
 </head>
 <body class="bg-gray-100 overflow-x-hidden min-h-screen antialiased text-gray-800">
