@@ -27,8 +27,8 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
-Route::get('/redirect-dashboard', DashboardRedirectController::class)
-->middleware(['auth', 'verified']);
+// Route::get('/redirect-dashboard', DashboardRedirectController::class)
+// ->middleware(['auth', 'verified']);
 
 Route::get('/admin/dashboard', AdminDashboard::class)
 ->middleware('role:admin')

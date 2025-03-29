@@ -2,25 +2,28 @@
 
 namespace App\Livewire\Visitor;
 
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Url;
 use Livewire\Component;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Booking;
 use Livewire\WithPagination;
-use App\Models\Book;
+use App\Models\Booking;
+use Illuminate\Support\Facades\Auth;
 class Dashboard extends Component
 {
     use WithPagination;
 
     public $statusFilter = 'all';
+    public $fromDate = null;
+    public $toDate = null;  
 
-    protected $queryString = ['statusFilter']; // ✅ Track in URL
-    public $fromDate;
-    public $toDate;
+    protected $queryString = ['statusFilter', 'fromDate', 'toDate'];
+  
 
     public function updatingStatusFilter()
     {
         $this->resetPage(); 
     }
+
     public function updatingFromDate()
     {
         $this->resetPage();
@@ -52,12 +55,17 @@ class Dashboard extends Component
             session()->flash('error', '⚠️ Book could not be returned.');
         }
     }
+    public function loadBookings()
+{
+    // No operation; this just ensures Livewire has an AJAX-aware context
+}
 
     public function render()
 {
     $query = Booking::with('book')
         ->where('user_id', Auth::id())
         ->latest();
+        
 
     if ($this->statusFilter !== 'all') {
         $query->where('status', $this->statusFilter);

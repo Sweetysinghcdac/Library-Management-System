@@ -16,7 +16,12 @@ class Booking extends Model
         'returned_at',
         'status',
     ];
-
+    protected $casts = [
+        'borrowed_at' => 'datetime',
+        'due_date' => 'datetime',
+        'returned_at' => 'datetime',
+    ];
+    
     // Relationship: A booking belongs to a book
     public function book()
     {

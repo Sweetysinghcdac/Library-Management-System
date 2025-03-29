@@ -7,52 +7,36 @@
         <div class="bg-red-100 text-red-700 p-3 rounded-lg shadow">{{ session('error') }}</div>
     @endif
 
-    <div wire:poll.500ms> {{-- Optional: helps keep UI fresh --}}
     <div class="flex flex-wrap gap-4 justify-between mb-4">
-    <div class="flex gap-2">
-        <a href="{{ route('visitor.books') }}" 
-            class="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition">
-            📚 Browse More Books
-        </a>
+        <div class="flex gap-2">
+            <a href="{{ route('visitor.books') }}" 
+               class="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition">
+                📚 Browse More Books
+            </a>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+            <select wire:model="statusFilter" class="border border-gray-300 rounded px-4 py-2 text-sm shadow-sm">
+                <option value="all">All</option>
+                <option value="pending">Pending</option>
+                <option value="returned">Returned</option>
+            </select>
+
+            <input type="date" wire:model="fromDate" class="border border-gray-300 rounded px-3 py-2 text-sm" placeholder="From Date">
+            <input type="date" wire:model="toDate" class="border border-gray-300 rounded px-3 py-2 text-sm" placeholder="To Date">
+
+            <a href="{{ route('visitor.export.pdf', ['status' => $statusFilter, 'fromDate' => $fromDate, 'toDate' => $toDate]) }}" 
+               target="_blank"
+               class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700 transition">
+                📄 PDF
+            </a>
+
+            <a href="{{ route('visitor.export.csv', ['status' => $statusFilter, 'fromDate' => $fromDate, 'toDate' => $toDate]) }}"
+               class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700 transition">
+                📁 CSV
+            </a>
+        </div>
     </div>
-    
-
-    <div class="flex flex-wrap items-center gap-2">
-        <select wire:model="statusFilter" class="border border-gray-300 rounded px-4 py-2 text-sm shadow-sm">
-            <option value="all">All</option>
-            <option value="pending">Pending</option>
-            <option value="returned">Returned</option>
-        </select>
-
-        <input type="date" wire:model="fromDate" class="border border-gray-300 rounded px-3 py-2 text-sm" placeholder="From Date">
-        <input type="date" wire:model="toDate" class="border border-gray-300 rounded px-3 py-2 text-sm" placeholder="To Date">
-        <a href="{{ route('visitor.export.pdf', [
-        'status' => $statusFilter,
-        'fromDate' => $fromDate,
-        'toDate' => $toDate
-    ]) }}" 
-    target="_blank"
-    class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700 transition">
-        📄 PDF
-    </a>
-
-    <a href="{{ route('visitor.export.csv', [
-        'status' => $statusFilter,
-        'fromDate' => $fromDate,
-        'toDate' => $toDate
-    ]) }}"
-    class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700 transition">
-        📁 CSV
-    </a>
-    
-    </div>
-
-    
-</div>
-
-    
-    </div>
-
 
     @if ($bookings->isEmpty())
         <div class="text-gray-600 text-lg">
@@ -61,8 +45,8 @@
         </div>
     @else
         <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-        @foreach ($bookings as $booking)
-        <div wire:key="booking-{{ $booking->id }}" class="bg-white p-5 rounded-xl ...">
+            @foreach ($bookings as $booking)
+                <div wire:key="booking-{{ $booking->id }}" class="bg-white p-5 rounded-xl shadow">
                     <div class="flex justify-between items-center mb-2">
                         <h3 class="text-lg font-bold text-blue-800">{{ $booking->book->title }}</h3>
                         <span class="text-sm px-3 py-1 rounded-full
@@ -82,7 +66,7 @@
                     @if ($booking->status !== 'returned')
                         <div class="mt-4">
                             <button wire:click="markAsReturned({{ $booking->id }})"
-                                class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md text-sm font-semibold transition">
+                                    class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md text-sm font-semibold transition">
                                 ✅ Mark as Returned
                             </button>
                         </div>
